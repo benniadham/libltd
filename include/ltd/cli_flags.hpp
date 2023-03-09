@@ -74,11 +74,11 @@ namespace ltd
         std::vector<argument> arguments;
 
     private:
-        ret<int, err::type> get_argument(char short_opt);
-        ret<int, err::type> add_argument(char short_opt);
+        ret<int, err::code> get_argument(char short_opt);
+        ret<int, err::code> add_argument(char short_opt);
 
-        err::type parse_argv();
-        err::type bind_values();
+        err::code parse_argv();
+        err::code bind_values();
 
     public:
         /**
@@ -97,7 +97,7 @@ namespace ltd
          * assigned with that value. If the option is not provided, then a
          * default value will be assigned to the variable.
          */
-        err::type bind(int* value, char short_opt, const std::string& long_opt, const std::string& help);
+        err::code bind(int* value, char short_opt, const std::string& long_opt, const std::string& help);
 
         /**
          * @brief
@@ -109,7 +109,7 @@ namespace ltd
          * assigned with that value. If the option is not provided, then a
          * default value will be assigned to the variable.
          */
-        err::type bind(std::string* value, char short_opt, const std::string& long_opt, const std::string& help);
+        err::code bind(std::string* value, char short_opt, const std::string& long_opt, const std::string& help);
 
         /**
          * @brief
@@ -121,7 +121,7 @@ namespace ltd
          * assigned with that value. If the option is not provided, then a
          * default value will be assigned to the variable.
          */
-        err::type bind(std::vector<const char*>* value, char short_opt, const std::string& long_opt, const std::string& help);
+        err::code bind(std::vector<const char*>* value, char short_opt, const std::string& long_opt, const std::string& help);
 
         /**
          * @brief
@@ -138,7 +138,7 @@ namespace ltd
          * @param long_opt  The long option
          * @return ret<char, error>
          */
-        ret<char, err::type> get_short_opt(const std::string& long_opt) const;
+        ret<char, err::code> get_short_opt(const std::string& long_opt) const;
 
         /**
          * @brief
@@ -147,7 +147,7 @@ namespace ltd
          * @param short_opt The short option
          * @return ret<const std::string&, error>
          */
-        ret<const std::string&, err::type> get_long_opt(char short_opt) const;
+        ret<const std::string&, err::code> get_long_opt(char short_opt) const;
 
         /**
          * @brief
@@ -156,16 +156,16 @@ namespace ltd
          * @param short_opt The short option
          * @return ret<int, error>
          */
-        ret<int, err::type> get_index(char short_opt) const;
+        ret<int, err::code> get_index(char short_opt) const;
 
         /**
          * @brief
          * Retrieve argv value in the given index
          * 
          * @param index     The index of argv to retrieve
-         * @return ret<const char*, err::type>
+         * @return ret<const char*, err::code>
          */
-        ret<const char*, err::type> at(size_t index) const;
+        ret<const char*, err::code> at(size_t index) const;
 
         /**
          * @brief
@@ -173,9 +173,9 @@ namespace ltd
          * 
          * @param argc
          * @param argv
-         * @return err::type
+         * @return err::code
          */
-        err::type parse(int argc, char** argv);
+        err::code parse(int argc, char** argv);
 
         /**
          * @brief

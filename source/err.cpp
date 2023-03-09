@@ -2,21 +2,24 @@
 
 namespace ltd
 {
-    const char* err::to_string(type err_type)
+    namespace err
     {
-        return desc[err_type];
-    }
+        std::string last_error;
 
-    void err::set_last_error(const std::string& message)
-    {
-        last_error = message;
-    }
+        const char* to_string(code err_code)
+        {
+            return std_message[err_code];
+        }
 
-    std::string err::get_last_error()
-    {
-        return last_error;
-    }
+        void set_last_error(const std::string& message)
+        {
+            last_error = message;
+        }
 
-    std::string err::last_error;
+        std::string get_last_error()
+        {
+            return last_error;
+        }
+    }
 
 } // namespace ltd

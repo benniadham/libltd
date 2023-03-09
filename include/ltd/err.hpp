@@ -31,10 +31,18 @@ namespace ltd
      * 
      * `err::to_string()` is available to get the null terminated string version.
      */
-    class err
+    namespace err 
     {
-    private:
-        static constexpr char const *desc[12] =
+        enum code
+        {
+            no_error,               null_pointer,               index_out_of_bound,
+            invalid_argument,       type_conversion_failure,    not_found,
+            allocation_failure,     deallocation_failure,       invalid_operation,
+            not_implemented,        invalid_state,              end_of_input,
+            error_code_max
+        };
+
+        constexpr char const *std_message[error_code_max] =
         {
             "No error",             "Null pointer",             "Index out-of-bound",
             "Invalid argument",     "Type conversion failure",  "Not found",
@@ -42,37 +50,24 @@ namespace ltd
             "Not implemented",      "Invalid state",            "End of input"
         };
 
-        static std::string last_error;
-
-    public:
-        enum type
-        {
-            no_error,               null_pointer,               index_out_of_bound,
-            invalid_argument,       type_conversion_failure,    not_found,
-            allocation_failure,     deallocation_failure,       invalid_operation,
-            not_implemented,        invalid_state,              end_of_input
-        };
-        
-        err() = delete;
-
         /**
          * @brief
          * Get the null terminated string version of the error code. 
          */
-        static const char* to_string(type err_type);
+        const char* to_string(code err_code);
 
         /**
          * @brief
          * Sets the last error message.
             */
-       static void set_last_error(const std::string& message);
+       void set_last_error(const std::string& message);
 
         /**
          * @brief
          * Read the last error. 
          */
-       static std::string get_last_error();
-    };
-}
+       std::string get_last_error();
+    } // namespace err
+} // namespace ltd
 
 #endif // _LTD_INCLUDE_ERR_HPP_

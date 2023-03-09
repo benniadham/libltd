@@ -10,7 +10,7 @@ namespace ltd
     cli_flags::cli_flags()
     {}
 
-    err::type cli_flags::bind(int* value, char short_opt, const std::string& long_opt, const std::string& help)
+    err::code cli_flags::bind(int* value, char short_opt, const std::string& long_opt, const std::string& help)
     {
         option opt;
 
@@ -23,7 +23,7 @@ namespace ltd
         return err::no_error;
     }
 
-    err::type cli_flags::bind(std::string* value, char short_opt, const std::string& long_opt, const std::string& help)
+    err::code cli_flags::bind(std::string* value, char short_opt, const std::string& long_opt, const std::string& help)
     {
         option opt;
 
@@ -36,7 +36,7 @@ namespace ltd
         return err::no_error;
     }
 
-    err::type cli_flags::bind(std::vector<const char*>* value, char short_opt, const std::string& long_opt, const std::string& help)
+    err::code cli_flags::bind(std::vector<const char*>* value, char short_opt, const std::string& long_opt, const std::string& help)
     {
         option opt;
 
@@ -56,7 +56,7 @@ namespace ltd
         }
     }
 
-    ret<char, err::type> cli_flags::get_short_opt(const std::string& long_opt) const
+    ret<char, err::code> cli_flags::get_short_opt(const std::string& long_opt) const
     {
         auto it = std::find_if(options.begin(), options.end(), [&long_opt](const option& opt) -> bool {
             return opt.long_opt == long_opt;
@@ -68,7 +68,7 @@ namespace ltd
         return {(*it).short_opt, err::no_error};
     }
 
-    ret<const std::string&, err::type> cli_flags::get_long_opt(char short_opt) const
+    ret<const std::string&, err::code> cli_flags::get_long_opt(char short_opt) const
     {
         auto it = std::find_if(options.begin(), options.end(), [short_opt](const option& opt) -> bool {
             return opt.short_opt == short_opt;
@@ -80,7 +80,7 @@ namespace ltd
         return {(*it).long_opt, err::no_error};
     }
 
-    ret<int, err::type> cli_flags::get_index(char short_opt) const
+    ret<int, err::code> cli_flags::get_index(char short_opt) const
     {
         int index = 0;
 
@@ -94,7 +94,7 @@ namespace ltd
         return {-1, err::not_found};
     }
 
-    ret<const char*, err::type> cli_flags::at(size_t index) const
+    ret<const char*, err::code> cli_flags::at(size_t index) const
     {
         if (index < argc)
             return {argv[index], err::no_error};
@@ -102,7 +102,7 @@ namespace ltd
         return {nullptr, err::index_out_of_bound};
     }
 
-    ret<int, err::type> cli_flags::get_argument(char short_opt)
+    ret<int, err::code> cli_flags::get_argument(char short_opt)
     {
         int index = 0;
 
@@ -116,7 +116,7 @@ namespace ltd
         return {-1, err::not_found};
     }
 
-    ret<int, err::type> cli_flags::add_argument(char short_opt)
+    ret<int, err::code> cli_flags::add_argument(char short_opt)
     {
         auto [index, err] = get_argument(short_opt);
 
@@ -133,7 +133,7 @@ namespace ltd
         return {index, err};
     }
 
-    err::type cli_flags::parse_argv()
+    err::code cli_flags::parse_argv()
     {
         for (int i = 1; i < argc; i++) {
             int index = -1;
@@ -153,7 +153,7 @@ namespace ltd
                     arguments[index].occurence++;
                 } else {
                     for (int j = 1; argv[i][j] != '\0'; j++) {
-                        err::type err = err::no_error;
+                        err::code err = err::no_error;
 
                         auto short_opt = argv[i][j];
                         catch_ret(index, err) = add_argument(short_opt);
@@ -174,7 +174,7 @@ namespace ltd
         return err::no_error;
     }
 
-    err::type cli_flags::bind_values()
+    err::code cli_flags::bind_values()
     {
         for (auto arg : arguments) {
             auto [index, err] = get_index(arg.short_opt);
@@ -214,7 +214,7 @@ namespace ltd
         return err::no_error;
     }
 
-    err::type cli_flags::parse(int argc, char** argv)
+    err::code cli_flags::parse(int argc, char** argv)
     {
         this->argc = argc;
         this->argv = argv;
